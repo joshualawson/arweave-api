@@ -1,3 +1,4 @@
 quiet: False
 inpackage: True
 all: True
+case: underscore

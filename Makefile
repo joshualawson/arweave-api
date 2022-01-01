@@ -2,4 +2,3 @@
 
 test:
 	go test ./...
-
