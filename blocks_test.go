@@ -75,7 +75,7 @@ func TestArweave_BlocksByID(t *testing.T) {
 			statusCode: http.StatusOK,
 		},
 		{
-			name:       "get block should return 400 Bad Request",
+			name:       "get block should return 404 Not Found",
 			blockHash:  "*blockHash*",
 			response:   Block{},
 			json:       ``,

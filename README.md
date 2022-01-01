@@ -16,8 +16,8 @@ unit tests and an example
 - [ ] Submit Transaction
 
 ### Wallets
-- [ ] Get Wallet Balance
-- [ ] Get Last Transaction ID
+- [x] Get Wallet Balance
+- [x] Get Last Transaction ID
 
 ### Blocks
 - [x] Get Block by ID

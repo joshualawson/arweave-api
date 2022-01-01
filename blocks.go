@@ -37,6 +37,7 @@ type Poa struct {
 	Chunk    string `json:"chunk"`
 }
 
+// Block Get a block by its hash (idep_hash).
 func (a *Arweave) Block(blockHash string) (Block, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%sblock/hash/%s", a.fqdn(), blockHash), nil)
 	if err != nil {
