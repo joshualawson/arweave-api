@@ -7,13 +7,12 @@ A list of endpoints that are complete or need to be done, if the endpoint is mar
 unit tests and an example
 
 ### Transactions
-- [ ] Get Transaction by ID
-- [ ] Get Transaction Status
-- [ ] Get Transaction Field
-- [ ] Get Decoded Transaction Data (http://arweave.net/{id})
-- [ ] Get Transaction Data Encoded (http://arweave.net/tx/{id}/data.{extension})
-- [ ] Get Transaction Price
-- [ ] Submit Transaction
+- [x] Get Transaction by ID
+- [x] Get Transaction Status
+- [x] Get Transaction Field
+- [x] Get Decoded Transaction Data (http://arweave.net/{id})
+- [x] Get Transaction Price
+- [x] Submit Transaction
 
 ### Wallets
 - [x] Get Wallet Balance

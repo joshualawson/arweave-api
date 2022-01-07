@@ -2,15 +2,8 @@ package arweave
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
-)
-
-var (
-	ErrorNotOk func(statusCode int) error = func(statusCode int) error {
-		return fmt.Errorf("status code not 200 was [%v]", statusCode)
-	}
 )
 
 type InfoResponse struct {
@@ -27,7 +20,7 @@ type InfoResponse struct {
 
 // Info Get the current network information including height, current block, and other properties.
 func (a *Arweave) Info() (InfoResponse, error) {
-	req, err := http.NewRequest("GET", a.fqdn()+"info", nil)
+	req, err := http.NewRequest("GET", a.fqdn()+"/info", nil)
 	if err != nil {
 		return InfoResponse{}, err
 	}
@@ -57,7 +50,7 @@ type PeerListResponse []string
 // PeerList Get the list of peers from the node. Nodes can only respond with peers they currently know about, so this
 // will not be an exhaustive or complete list of nodes on the network.
 func (a *Arweave) PeerList() (PeerListResponse, error) {
-	req, err := http.NewRequest("GET", a.fqdn()+"peers", nil)
+	req, err := http.NewRequest("GET", a.fqdn()+"/peers", nil)
 	if err != nil {
 		return PeerListResponse{}, err
 	}

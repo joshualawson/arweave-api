@@ -32,7 +32,7 @@ func New(opts ...Option) *Arweave {
 
 func (a *Arweave) fqdn() string {
 	if a.port == "" {
-		return fmt.Sprintf("https://%s/", a.server)
+		return fmt.Sprintf("https://%s", a.server)
 	}
-	return fmt.Sprintf("https://%s:%s/", a.server, a.port)
+	return fmt.Sprintf("https://%s:%s", a.server, a.port)
 }

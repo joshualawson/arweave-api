@@ -9,7 +9,7 @@ import (
 
 // WalletBalance Get the balance for a given wallet. Unknown wallet addresses will simply return 0.
 func (a *Arweave) WalletBalance(address string) (*big.Int, error) {
-	req, err := http.NewRequest("GET", fmt.Sprintf("%swallet/%s/balance", a.fqdn(), address), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/wallet/%s/balance", a.fqdn(), address), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -36,7 +36,7 @@ func (a *Arweave) WalletBalance(address string) (*big.Int, error) {
 
 // WalletLastTransactionID Get the last outgoing transaction for the given wallet address.
 func (a *Arweave) WalletLastTransactionID(address string) (string, error) {
-	req, err := http.NewRequest("GET", fmt.Sprintf("%swallet/%s/last_tx", a.fqdn(), address), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/wallet/%s/last_tx", a.fqdn(), address), nil)
 	if err != nil {
 		return "", err
 	}

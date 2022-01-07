@@ -39,7 +39,7 @@ type Poa struct {
 
 // Block Get a block by its hash (idep_hash).
 func (a *Arweave) Block(blockHash string) (Block, error) {
-	req, err := http.NewRequest("GET", fmt.Sprintf("%sblock/hash/%s", a.fqdn(), blockHash), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/block/hash/%s", a.fqdn(), blockHash), nil)
 	if err != nil {
 		return Block{}, err
 	}
