@@ -30,6 +30,11 @@ type TransactionStatus struct {
 	NumberOfConfirmations int    `json:"number_of_confirmations"`
 }
 
+type TransactionOffset struct {
+	Offset string `json:"offset"`
+	Size   string `json:"size"`
+}
+
 // Transaction Get a transaction by its ID.
 func (a *Arweave) Transaction(id string) (Transaction, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/tx/%s", a.fqdn(), id), nil)
@@ -52,7 +57,9 @@ func (a *Arweave) Transaction(id string) (Transaction, error) {
 	}
 
 	var t Transaction
-	json.Unmarshal(body, &t)
+	if err := json.Unmarshal(body, &t); err != nil {
+		return Transaction{}, ErrorJsonUnmarshal(err)
+	}
 
 	return t, nil
 }
@@ -79,7 +86,9 @@ func (a *Arweave) TransactionStatus(id string) (TransactionStatus, error) {
 	}
 
 	var ts TransactionStatus
-	json.Unmarshal(body, &ts)
+	if err := json.Unmarshal(body, &ts); err != nil {
+		return TransactionStatus{}, ErrorJsonUnmarshal(err)
+	}
 
 	return ts, nil
 }
@@ -134,6 +143,58 @@ func (a *Arweave) Data(id string) ([]byte, string, error) {
 	return body, ct, nil
 }
 
+// TransactionData The endpoint serves data regardless of how it was uploaded
+func (a *Arweave) TransactionData(id string) ([]byte, error) {
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/tx/%s/data", a.fqdn(), id), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := a.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	if res.StatusCode != http.StatusOK {
+		return nil, ErrorNotOk(res.StatusCode)
+	}
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	return body, nil
+}
+
+func (a *Arweave) TransactionOffset(id string) (TransactionOffset, error) {
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/tx/%s/offset", a.fqdn(), id), nil)
+	if err != nil {
+		return TransactionOffset{}, err
+	}
+
+	res, err := a.client.Do(req)
+	if err != nil {
+		return TransactionOffset{}, err
+	}
+
+	if res.StatusCode != http.StatusOK {
+		return TransactionOffset{}, ErrorNotOk(res.StatusCode)
+	}
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return TransactionOffset{}, err
+	}
+
+	var o TransactionOffset
+	if err := json.Unmarshal(body, &o); err != nil {
+		return TransactionOffset{}, ErrorJsonUnmarshal(err)
+	}
+
+	return o, nil
+}
+
 // TransactionPrice This endpoint is used to calculate the minimum fee (reward) for a transaction of a specific size,
 // and possibly to a specific address.This endpoint should always be used to calculate transaction fees as closely to
 // the submission time as possible. Pricing is dynamic and determined by the network, so it's not always possible to
@@ -159,7 +220,9 @@ func (a *Arweave) TransactionPrice(bytes string, target *string) (*big.Int, erro
 	}
 
 	p := new(big.Int)
-	p.UnmarshalText(body)
+	if err := p.UnmarshalText(body); err != nil {
+		return nil, ErrorUnmarshalTextToBigInt(err)
+	}
 
 	return p, nil
 }
@@ -169,7 +232,7 @@ func (a *Arweave) TransactionPrice(bytes string, target *string) (*big.Int, erro
 func (a *Arweave) SubmitTransaction(t Transaction) (string, error) {
 	b, err := json.Marshal(t)
 	if err != nil {
-		return "", JsonMarshalError(err)
+		return "", ErrorJsonMarshal(err)
 	}
 
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s/tx", a.fqdn()), bytes.NewReader(b))

@@ -29,7 +29,9 @@ func (a *Arweave) WalletBalance(address string) (*big.Int, error) {
 	}
 
 	i := new(big.Int)
-	i.UnmarshalText(body)
+	if err := i.UnmarshalText(body); err != nil {
+		return nil, ErrorUnmarshalTextToBigInt(err)
+	}
 
 	return i, nil
 }

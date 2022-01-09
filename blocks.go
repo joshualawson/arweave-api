@@ -59,7 +59,9 @@ func (a *Arweave) Block(blockHash string) (Block, error) {
 	}
 
 	var b Block
-	json.Unmarshal(body, &b)
+	if err := json.Unmarshal(body, &b); err != nil {
+		return Block{}, ErrorJsonUnmarshal(err)
+	}
 
 	return b, nil
 }

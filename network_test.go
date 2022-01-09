@@ -12,14 +12,14 @@ import (
 func TestArweave_Info(t *testing.T) {
 	var tests = []struct {
 		name       string
-		response   InfoResponse
+		response   Info
 		json       string
 		statusCode int
 		err        error
 	}{
 		{
 			name: "get info should return 200 ok",
-			response: InfoResponse{
+			response: Info{
 				Network:          "arweave.N.1",
 				Version:          5,
 				Release:          43,
@@ -45,7 +45,7 @@ func TestArweave_Info(t *testing.T) {
 		},
 		{
 			name:       "get info should return 400 Bad Request",
-			response:   InfoResponse{},
+			response:   Info{},
 			json:       ``,
 			statusCode: http.StatusBadRequest,
 			err:        ErrorNotOk(http.StatusBadRequest),
@@ -75,14 +75,14 @@ func TestArweave_PeerList(t *testing.T) {
 
 	var tests = []struct {
 		name       string
-		response   PeerListResponse
+		response   PeerList
 		json       string
 		statusCode int
 		err        error
 	}{
 		{
 			name: "get peer list should return 200 OK",
-			response: PeerListResponse{
+			response: PeerList{
 				"localhost:1984",
 				"127.0.0.1:1984",
 			},
@@ -91,7 +91,7 @@ func TestArweave_PeerList(t *testing.T) {
 		},
 		{
 			name:       "get peer list should return 400 Bad Request",
-			response:   PeerListResponse{},
+			response:   PeerList{},
 			json:       ``,
 			statusCode: http.StatusBadRequest,
 			err:        ErrorNotOk(http.StatusBadRequest),

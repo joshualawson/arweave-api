@@ -27,7 +27,7 @@ unit tests and an example
 
 ### Chunks
 #### Upload Chunks
-- [ ] Upload Chunks
+- [x] Upload Chunks
 #### Download Chunks
-- [ ] Get Transaction Data
-- [ ] Get Transaction Offset and Size
+- [x] Get Transaction Data
+- [x] Get Transaction Offset and Size
