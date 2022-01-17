@@ -22,6 +22,7 @@ type Transaction struct {
 	DataSize  string `json:"data_size"`
 	Reward    string `json:"reward"`
 	Signature string `json:"signature"`
+	Pending   bool   `json:"-"`
 }
 
 type TransactionStatus struct {
@@ -47,21 +48,25 @@ func (a *Arweave) Transaction(id string) (Transaction, error) {
 		return Transaction{}, err
 	}
 
-	if res.StatusCode != http.StatusOK {
-		return Transaction{}, ErrorNotOk(res.StatusCode)
+	if res.StatusCode == http.StatusOK || res.StatusCode == http.StatusAccepted {
+		body, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			return Transaction{}, err
+		}
+
+		var t Transaction
+		if res.StatusCode == http.StatusOK {
+			if err := json.Unmarshal(body, &t); err != nil {
+				return Transaction{}, ErrorJsonUnmarshal(err)
+			}
+		} else {
+			t.Pending = true
+		}
+
+		return t, nil
 	}
 
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		return Transaction{}, err
-	}
-
-	var t Transaction
-	if err := json.Unmarshal(body, &t); err != nil {
-		return Transaction{}, ErrorJsonUnmarshal(err)
-	}
-
-	return t, nil
+	return Transaction{}, ErrorNotOk(res.StatusCode)
 }
 
 // TransactionStatus Get the status of a transaction
